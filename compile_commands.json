@@ -1,0 +1,16 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/x86_64-w64-mingw32-g++",
+      "-c",
+      "-Wall",
+      "-Wextra",
+      "-o",
+      "handmade",
+      "win32_gloggy.cpp"
+    ],
+    "directory": "/home/coding/projects/gloggy",
+    "file": "/home/coding/projects/gloggy/win32_gloggy.cpp",
+    "output": "/home/coding/projects/gloggy/handmade"
+  }
+]
