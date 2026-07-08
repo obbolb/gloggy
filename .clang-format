@@ -1,0 +1,42 @@
+---
+# Base style to inherit from
+BasedOnStyle: LLVM
+
+# This enforces int* ptr instead of int *ptr
+PointerAlignment: Left
+
+ColumnLimit: 100
+
+#indentation
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# Prevents the formatter from aggressively packing structs and enums
+# onto a single line if you've laid them out vertically.
+AllowShortEnumsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+
+# Aligns consecutive assignments (e.g., in massive config structs)
+# int a      = 1;
+# int longer = 2;
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: false
+
+# Keeps includes sorted logically
+SortIncludes: true
+
+# --------------------------------------------------------
+# Brace Rules
+# --------------------------------------------------------
+# Custom brace wrapping: Keeps braces attached to statements,
+# but forces 'else' onto its own new line.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: false
+  AfterFunction: false
+  AfterStruct: false
+  AfterEnum: false
+  BeforeElse: true
+...

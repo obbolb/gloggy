@@ -1,5 +1,4 @@
 -include 
 code/base.h
--include
-code/platform/platform.h
--Iinclude
+-Icode/third_party/glad/include
+

@@ -1,44 +1,52 @@
 #include "base.h"
-#include "third_party/glad.c"
+#include <glad/gl.h>
 
-GLuint gl_create_program(Arena* arena, const char *vert_shader_path,
-                         const char *frag_shader_path) {
-    TempArena temp_arena = start_temp_arena(arena);
+b8 r_gl_load_func(GLADloadfunc func) {
+  return gladLoadGL(func);
+}
 
-    GLuint frag_shader, vert_shader, program;
-    //load shader
-    vert_shader = glCreateShader(GL_VERTEX_SHADER);
-    frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* vert_shader_src = platform_read_file(temp_arena.arena, vert_shader_path);
-    const char* frag_shader_src = platform_read_file(temp_arena.arena, frag_shader_path);
-    glShaderSource(vert_shader, 1, &vert_shader_src, NULL);
-    glShaderSource(frag_shader, 1, &frag_shader_src, NULL);
+GLuint r_gl_create_program(Arena* arena, const char* vert_shader_path,
+                           const char* frag_shader_path) {
 
-    //check for shader compilation errors
-    i32 success;
-    glCompileShader(vert_shader);
-    glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        char log[512];
-        glGetShaderInfoLog(vert_shader, 512, NULL, log);
-        printf("vert shader = %s", log);
-    }
-    glCompileShader(frag_shader);
-    glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-            char log[512];
-            glGetShaderInfoLog(frag_shader, 512, NULL, log);
-            printf("frag shader = %s", log);
-    }
+  TempArena temp = temp_arena_start(arena);
 
-    program = glCreateProgram();
-    glAttachShader(program, vert_shader);
-    glAttachShader(program, frag_shader);
-    glLinkProgram(program);
-    glDeleteShader(vert_shader);
-    glDeleteShader(frag_shader);
+  GLuint program = glCreateProgram();
+  GLuint vert    = glCreateShader(GL_VERTEX_SHADER);
+  GLuint frag    = glCreateShader(GL_FRAGMENT_SHADER);
 
-    end_temp_arena(temp_arena);
-    return program;
+  const GLchar* vert_src = (GLchar*)read_file(temp.arena, vert_shader_path, 0, true);
+  const GLchar* frag_src = (GLchar*)read_file(temp.arena, frag_shader_path, 0, true);
 
+  glShaderSource(vert, 1, &vert_src, 0);
+  glShaderSource(frag, 1, &frag_src, 0);
+
+  glCompileShader(vert);
+  glCompileShader(frag);
+
+  // check shader compilation errs
+  GLint success;
+  glGetShaderiv(vert, GL_COMPILE_STATUS, &success);
+  if (!success) {
+    GLint size;
+    glGetShaderiv(vert, GL_INFO_LOG_LENGTH, &size);
+    GLchar* buf = arena_push_array(temp.arena, GLchar, size);
+    glGetShaderInfoLog(vert, size, 0, buf);
+    log_error("%s", buf);
+  }
+
+  if (!success) {
+    GLint size;
+    glGetShaderiv(frag, GL_INFO_LOG_LENGTH, &size);
+    GLchar* buf = arena_push_array(temp.arena, GLchar, size);
+    glGetShaderInfoLog(frag, size, 0, buf);
+    log_error("%s", buf);
+  }
+
+  glAttachShader(program, vert);
+  glAttachShader(program, frag);
+  glLinkProgram(program);
+
+  temp_arena_end(temp);
+
+  return program;
 }
