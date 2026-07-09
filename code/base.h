@@ -18,7 +18,22 @@
 #define COMPILER_MSVC 1
 #endif
 
-// TODO: define undefined macro to 0
+// set undefined macros to 0
+#if !defined(OS_LINUX)
+#define OS_LINUX 0
+#endif
+#if !defined(OS_WINDOWS)
+#define OS_WINDOWS 0
+#endif
+#if !defined(COMPILER_GCC)
+#define COMPILER_GCC 0
+#endif
+#if !defined(COMPILER_CLANG)
+#define COMPILER_CLANG 0
+#endif
+#if !defined(COMPILER_MSVC)
+#define COMPILER_MSVC 0
+#endif
 
 ////////////////////////////////
 // basic types
@@ -40,6 +55,8 @@ typedef double f64;
 #define true 1
 
 #define KB(n) n * (1 << 10)
+#define MB(n) KB(n) * (1 << 10)
+#define GB(n) MB(n) * (1 << 10)
 
 ////////////////////////////////
 // constants
@@ -55,8 +72,7 @@ f32 pi32 = 3.1415926535897f;
 
 ////////////////////////////////
 // utils
-//  TODO: context cracking
-#if defined(__GNUC__) || defined(__CLANG__)
+#if COMPILER_GCC || COMPILER_CLANG
 #define Alignof(t) __alignof__(t)
 #endif
 

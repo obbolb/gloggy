@@ -31,7 +31,7 @@ GLuint r_gl_create_program(Arena* arena, const char* vert_shader_path,
     glGetShaderiv(vert, GL_INFO_LOG_LENGTH, &size);
     GLchar* buf = arena_push_array(temp.arena, GLchar, size);
     glGetShaderInfoLog(vert, size, 0, buf);
-    log_error("%s", buf);
+    log_error("vert : %s", buf);
   }
 
   if (!success) {
@@ -39,7 +39,7 @@ GLuint r_gl_create_program(Arena* arena, const char* vert_shader_path,
     glGetShaderiv(frag, GL_INFO_LOG_LENGTH, &size);
     GLchar* buf = arena_push_array(temp.arena, GLchar, size);
     glGetShaderInfoLog(frag, size, 0, buf);
-    log_error("%s", buf);
+    log_error("frag : %s", buf);
   }
 
   glAttachShader(program, vert);

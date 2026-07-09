@@ -51,5 +51,5 @@ void _log(LogLevel level, const char* fmt, ...) {
   vsnprintf(msg, 512, fmt, args);
   va_end(args);
 
-  fprintf(stderr, "%s%s", msg_prefix[level], msg);
+  fprintf(stderr, "%s%s\n", msg_prefix[level], msg);
 }

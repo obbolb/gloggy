@@ -10,7 +10,7 @@ static u64 file_size_from_fd(i32 fd) {
 
 u8* read_file(Arena* arena, const char* file_path, u64* buf_len, b8 null_terminated) {
   i32 fd = open(file_path, O_RDONLY);
-  Assert((fd < 0) && "file not found");
+  Assert((fd > 0) && "file not found");
 
   u64 file_size = file_size_from_fd(fd);
 
@@ -28,8 +28,11 @@ u8* read_file(Arena* arena, const char* file_path, u64* buf_len, b8 null_termina
   }
 
   u64 read_size = read(fd, buf, file_size);
-  Assert(read_size != file_size);
+  Assert(read_size == file_size);
 
-  *buf_len = size;
+  if (buf_len != NULL) {
+    *buf_len = size;
+  }
+
   return buf;
 }
