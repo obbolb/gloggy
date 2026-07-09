@@ -29,6 +29,9 @@ int main() {
   glfwSetKeyCallback(window, glfw_key_callback);
 
   Assert(r_gl_load_func((GLADloadfunc)glfwGetProcAddress));
+
+  glViewport(0, 0, 1600, 900);
+
   GLfloat vertices[] = {-0.5, -0.5, 0, 1, 0, 0, 0.5, -0.5, 0, 0, 1, 0, 0, 0.5, 0, 0, 0, 1};
 
   GLuint vao, vbo;
@@ -37,8 +40,8 @@ int main() {
   glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, (void*)(3 * sizeof(GLfloat)));
+  glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(GLfloat), 0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 

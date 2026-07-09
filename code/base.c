@@ -17,16 +17,18 @@ Arena* arena_alloc(u64 size) {
 }
 
 void* arena_push_align(Arena* arena, u64 push_size, u64 alignment) {
+  // TODO: need to check if memory is left after aligning ptr
   u64 memory_left = arena->capacity - arena->used;
   if (memory_left < push_size) {
     //  TODO: Growable arenas
     Assert(!"Arena is full");
   }
   else {
-    u8* result         = arena->buffer + arena->used;
-    u8* aligned_result = (u8*)align_forward(result, alignment);
-    arena->used        = (aligned_result - arena->buffer);
-    return result;
+    u8* curr_ptr         = arena->buffer + arena->used;
+    u8* aligned_curr_ptr = (u8*)align_forward(curr_ptr, alignment);
+    u64 aligned_offset   = aligned_curr_ptr - curr_ptr;
+    arena->used += aligned_offset + push_size;
+    return aligned_curr_ptr;
   }
 }
 
