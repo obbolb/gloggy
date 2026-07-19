@@ -1,4 +1,6 @@
 -include 
-code/base.h
+code/base/base.h
+-include
+cglm/cglm.h
 -Icode/third_party/glad/include
 
